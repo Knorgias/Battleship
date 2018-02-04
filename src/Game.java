@@ -185,21 +185,25 @@ class Player {
     }
 
     boolean shoot(int coordX, int coordY){
-        //Recalibration
-        coordX -= 1;
-        coordY -= 1;
-        if(board != null){ //CHECK: Only if a board was set
-            if(board.seaMatrix[coordX][coordY] == 'o'){ // If we hit part of a ship
-                board.seaMatrix[coordX][coordY] = 'x';  //Destroy it
-                System.out.println("Poseidon's with you! " + this.name + "! You hit a boat.");
-                return true;
-            } else if(board.seaMatrix[coordX][coordY] == '-'){ // If we did not hit a ship
-                board.seaMatrix[coordX][coordY] = '?';  //Mark it wih a '?'
-                System.out.println("You missed! The goddess of victory is flying away.");
-                return false;
+        if((coordX < 1 || coordX > 8) || (coordY < 1 || coordY > 8)){
+            return false;
+        } else {
+            //Recalibration
+            coordX -= 1;
+            coordY -= 1;
+            if (board != null) { //CHECK: Only if a board was set
+                if (board.seaMatrix[coordX][coordY] == 'o') { // If we hit part of a ship
+                    board.seaMatrix[coordX][coordY] = 'x';  //Destroy it
+                    System.out.println("Poseidon's with you! " + this.name + "! You hit a boat.");
+                    return true;
+                } else if (board.seaMatrix[coordX][coordY] == '-') { // If we did not hit a ship
+                    board.seaMatrix[coordX][coordY] = '?';  //Mark it wih a '?'
+                    System.out.println("You missed! The goddess of victory is flying away.");
+                    return false;
+                }
             }
+            return false; // If all else failed, the return value is "false"
         }
-        return false; // If all else failed, the return value is "false"
     }
     /* Methods end */
 }
