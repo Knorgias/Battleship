@@ -1,13 +1,16 @@
 import java.util.Scanner;
 
+/* Game class */
 public class Game {
+    /* Main */
     public static void main(String args[]){
+        /* Initializations */
         Board player1Board = new Board(); // First, I create a Board
-        player1Board.placeShips();  // Then, I place the ships, hardcoded
-        player1Board.printBoard(); //Then, I print the board's state
+        player1Board.placeShipsConfig1();  // Then, I place the ships, hardcoded
+        player1Board.printBoardState(); //Then, I print the board's state
 
         Board player2Board = new Board();
-        player2Board.placeShips();
+        player2Board.placeShipsConfig2();
 
         Player player1 = new Player("Kostas");
         System.out.println("INFO: Player 1 created\n----------");
@@ -20,86 +23,148 @@ public class Game {
         Scanner scn = new Scanner(System.in);
         System.out.println("INFO: New console read object created\n----------");
 
-        //System.out.println(player1Board.shipsDestroyed());
-        //System.out.println(player2Board.shipsDestroyed());
-        while(!player1Board.shipsDestroyed() && !player2Board.shipsDestroyed()){
-            System.out.println(player1.name + " please provide your coordinates: \n");
-            while(player1.shoot(scn.nextInt(), scn.nextInt())){
-                System.out.println("You may play again. Good luck!\n");
+        String attackMsg = " prepare to attack!\n(coordinates example: 2, ENTER, 3, ENTER): \n";
+        String playAgainMsg = "You may play again, good luck!\n(coordinates example: 2, ENTER, 3, ENTER): \n";
+        /* Initializations end */
+
+        while(!player1Board.shipsDestroyed() && !player2Board.shipsDestroyed()){ //Until either board's ships are destroyed
+
+            /* Player 1 turn */
+            System.out.println(player1.name + attackMsg);
+            while(player1.shoot(scn.nextInt(), scn.nextInt())){ // We get a return statement of "true" while the player "hits", so we can play again
+                player1.board.printPlayerBoardState();
+                System.out.println(playAgainMsg);
             }
-            System.out.println(player2.name + " please provide your coordinates: \n");
+            player1.board.printPlayerBoardState();
+
+            /*Player 2 turn */
+            System.out.println(player2.name + attackMsg);
             while(player1.shoot(scn.nextInt(), scn.nextInt())){
-                System.out.println("You may play again. Good luck!\n");
+                player2.board.printPlayerBoardState();
+                System.out.println(playAgainMsg);
             }
+            player2.board.printPlayerBoardState();
         }
-        System.out.println("*** GAME OVER! ***");
+        /* End of game message refinement based on winner */
+        if(player1Board.shipsDestroyed()){
+            System.out.println("*** GAME OVER! ***\n*** " + player1.name + " wins!");
+        } else if(player2Board.shipsDestroyed()){
+            System.out.println("*** GAME OVER! ***\n*** " + player2.name + " wins!");
+        } else {
+            System.out.println("*** GAME OVER! ***\n*** No winner..!? - You must have incurred Poseidon's wrath! ***");
+        }
 
     }
+    /* Main end */
 }
+/* Game class end */
 
-/* Sea Class Start */
+/* Board class */
 class Board {
-    int seaMatrix[][] = new int[8][8];
+    char seaMatrix[][] = new char[8][8]; // 2-D array of characters (for more variety of appearance)
 
     Board() {
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
-                seaMatrix[i][j] = 0;
+                seaMatrix[i][j] = '-';
             }
         }
     }
 
-    void placeShips() {
-        seaMatrix[1][0] = 1;
-        seaMatrix[2][0] = 1;
+    void placeShipsConfig1() {
+        seaMatrix[1][0] = 'o';
+        seaMatrix[2][0] = 'o';
 
-        seaMatrix[0][2] = 1;
-        seaMatrix[1][2] = 1;
-        seaMatrix[2][2] = 1;
+        seaMatrix[0][2] = 'o';
+        seaMatrix[1][2] = 'o';
+        seaMatrix[2][2] = 'o';
 
-        seaMatrix[0][5] = 1;
-        seaMatrix[0][6] = 1;
-        seaMatrix[0][7] = 1;
+        seaMatrix[0][5] = 'o';
+        seaMatrix[0][6] = 'o';
+        seaMatrix[0][7] = 'o';
 
-        seaMatrix[4][2] = 1;
-        seaMatrix[4][3] = 1;
-        seaMatrix[4][4] = 1;
-        seaMatrix[4][5] = 1;
+        seaMatrix[4][2] = 'o';
+        seaMatrix[4][3] = 'o';
+        seaMatrix[4][4] = 'o';
+        seaMatrix[4][5] = 'o';
 
-        seaMatrix[6][1] = 1;
-        seaMatrix[6][2] = 1;
-        seaMatrix[6][3] = 1;
-        seaMatrix[6][4] = 1;
-        seaMatrix[6][5] = 1;
-        seaMatrix[6][6] = 1;
+        seaMatrix[6][1] = 'o';
+        seaMatrix[6][2] = 'o';
+        seaMatrix[6][3] = 'o';
+        seaMatrix[6][4] = 'o';
+        seaMatrix[6][5] = 'o';
+        seaMatrix[6][6] = 'o';
     }
 
-    void printBoard() {
-        System.out.println("Your Sea: \n");
+    void placeShipsConfig2() {
+        /* 2-point ship */
+        seaMatrix[1][7] = 'o';
+        seaMatrix[2][7] = 'o';
+
+        /* 3-point ships */
+        seaMatrix[4][1] = 'o';
+        seaMatrix[4][2] = 'o';
+        seaMatrix[4][3] = 'o';
+
+        seaMatrix[4][5] = 'o';
+        seaMatrix[4][6] = 'o';
+        seaMatrix[4][7] = 'o';
+
+        /*4-point ship */
+        seaMatrix[6][2] = 'o';
+        seaMatrix[6][3] = 'o';
+        seaMatrix[6][4] = 'o';
+        seaMatrix[6][5] = 'o';
+
+        /* 6-point ship */
+        seaMatrix[0][0] = 'o';
+        seaMatrix[0][1] = 'o';
+        seaMatrix[0][2] = 'o';
+        seaMatrix[0][3] = 'o';
+        seaMatrix[0][4] = 'o';
+        seaMatrix[0][5] = 'o';
+    }
+
+    void printBoardState() {
+        System.out.println("State of board: \n");
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
-                System.out.print(this.seaMatrix[i][j]+" ");
+                System.out.print(this.seaMatrix[i][j]+"\t");
+            }
+            System.out.println();
+        }
+    }
+
+    void printPlayerBoardState() {
+        System.out.println("The state of your board: \n");
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                if(this.seaMatrix[i][j] == 1) {
+                    System.out.print("0" + "\t");
+                } else {
+                    System.out.print(this.seaMatrix[i][j] + "\t");
+                }
             }
             System.out.println();
         }
     }
 
     boolean shipsDestroyed(){
-        boolean flag = true;
+        //boolean flag = true;
         for(int i=0 ; i<8 ; i++){
             for(int j=0; j<8 ; j++){
-                if(this.seaMatrix[i][j] == 1){
-                    flag = false;
+                if(this.seaMatrix[i][j] == 'o'){
+                    return false;
                 }
             }
         }
-        return flag; // Default return = false
+        return true; // Default return = false
     }
 
 }
-/* Sea class End */
+/* Board class end */
 
-/* Player class Start */
+/* Player class */
 class Player {
     String name = "Commander";
     Board board;
@@ -119,25 +184,20 @@ class Player {
         this.board = myBoard;
     }
 
-    Boolean shoot(int coordX, int coordY){
-        if(board != null){ //Only if a board was set
-            if(board.seaMatrix[coordX][coordY] == 1){
-                board.seaMatrix[coordX][coordY] = -1;
-                System.out.println("Well done " + this.name + "! You hit a boat! You may play again.");
+    boolean shoot(int coordX, int coordY){
+        if(board != null){ //CHECK: Only if a board was set
+            if(board.seaMatrix[coordX][coordY] == 'o'){ // If we hit part of a ship
+                board.seaMatrix[coordX][coordY] = 'x';  //Destroy it
+                System.out.println("Poseidon's with you! " + this.name + "! You hit a boat.");
                 return true;
-            } else if(board.seaMatrix[coordX][coordY] == 0){
-                System.out.println("Oops! You missed. Better luck next time.");
+            } else if(board.seaMatrix[coordX][coordY] == '-'){ // If we did not hit a ship
+                board.seaMatrix[coordX][coordY] = '?';  //Mark it wih a '?'
+                System.out.println("You missed! The goddess of victory is flying away.");
                 return false;
             }
         }
-        return false; // If all else failed, the return value is false
+        return false; // If all else failed, the return value is "false"
     }
     /* Methods end */
 }
 /* Player class end */
-
-/* Shoot class Start */
-class Shoot {
-
-}
-/* Shoot class End */
