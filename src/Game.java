@@ -23,8 +23,8 @@ public class Game {
         Scanner scn = new Scanner(System.in);
         System.out.println("INFO: New console read object created\n----------");
 
-        String attackMsg = " prepare to attack!\n(coordinates example: 2, ENTER, 3, ENTER): \n";
-        String playAgainMsg = "You may play again, good luck!\n(coordinates example: 2, ENTER, 3, ENTER): \n";
+        String attackMsg = " prepare to attack!\n(2 coordinates from 1-8. Example: 2, ENTER, 3, ENTER): \n";
+        String playAgainMsg = "You may play again, good luck!\n(2 coordinates from 1-8. Example: 2, ENTER, 3, ENTER): \n";
         /* Initializations end */
 
         while(!player1Board.shipsDestroyed() && !player2Board.shipsDestroyed()){ //Until either board's ships are destroyed
@@ -126,7 +126,7 @@ class Board {
     }
 
     void printBoardState() {
-        System.out.println("State of board: \n");
+        System.out.println("True state of board: \n");
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 System.out.print(this.seaMatrix[i][j]+"\t");
@@ -136,7 +136,7 @@ class Board {
     }
 
     void printPlayerBoardState() {
-        System.out.println("The state of your board: \n");
+        System.out.println("Player's state of board: \n");
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 if(this.seaMatrix[i][j] == 1) {
@@ -185,6 +185,9 @@ class Player {
     }
 
     boolean shoot(int coordX, int coordY){
+        //Recalibration
+        coordX -= 1;
+        coordY -= 1;
         if(board != null){ //CHECK: Only if a board was set
             if(board.seaMatrix[coordX][coordY] == 'o'){ // If we hit part of a ship
                 board.seaMatrix[coordX][coordY] = 'x';  //Destroy it
